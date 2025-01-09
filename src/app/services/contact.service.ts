@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import {ContactUser} from "../models/contact-user.interface";
+
+import { ContactUser } from '../models/contact-user.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -26,50 +27,60 @@ export class ContactService {
     },
   ];
 
-  private storageKey = 'contacts';
-
-  constructor() {}
+  private storageKey: string = 'contacts';
 
   getContacts(): any[] {
-    const storedContacts = localStorage.getItem(this.storageKey);
+    const storedContacts: string | null = localStorage.getItem(this.storageKey);
 
     if (storedContacts) {
       return JSON.parse(storedContacts);
     } else {
-      localStorage.setItem(this.storageKey, JSON.stringify(this.defaultContacts));
+      localStorage.setItem(
+        this.storageKey,
+        JSON.stringify(this.defaultContacts),
+      );
       return this.defaultContacts;
     }
   }
-  getContactById(id: number) {
+
+  getContactById(id: number): ContactUser {
     const contacts = JSON.parse(localStorage.getItem(this.storageKey) || '[]');
-    return contacts.find((contact:ContactUser) => contact.id === id);
+    return contacts.find((contact: ContactUser) => contact.id === id);
   }
+
   saveContacts(contacts: ContactUser[]): void {
     localStorage.setItem(this.storageKey, JSON.stringify(contacts));
   }
 
-  addContact(contact: any): any[] {
-    const contacts = this.getContacts();
+  addContact(contact: ContactUser): ContactUser[] {
+    const contacts: ContactUser[] = this.getContacts();
     contact.id = this.generateId();
     contacts.push(contact);
     this.saveContacts(contacts);
+
     return contacts;
   }
 
   private generateId(): number {
-    const contacts = this.getContacts();
+    const contacts: ContactUser[] = this.getContacts();
+
     return contacts.length ? contacts[contacts.length - 1].id + 1 : 1;
   }
 
-  deleteContact(contactId: number): any[] {
-    const contacts = this.getContacts().filter(contact => contact.id !== contactId);
+  deleteContact(contactId: number): ContactUser[] {
+    const contacts: ContactUser[] = this.getContacts().filter(
+      (contact: ContactUser) => contact.id !== contactId,
+    );
     this.saveContacts(contacts);
+
     return contacts;
   }
 
   updateContact(updatedContact: ContactUser): ContactUser[] {
     const contacts: ContactUser[] = this.getContacts();
-    const index: number = contacts.findIndex((contact: ContactUser) => contact.id === updatedContact.id);
+    const index: number = contacts.findIndex(
+      (contact: ContactUser) => contact.id === updatedContact.id,
+    );
 
     if (index !== -1) {
       contacts[index] = updatedContact;
@@ -78,5 +89,4 @@ export class ContactService {
 
     return contacts;
   }
-
 }

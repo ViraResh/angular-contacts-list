@@ -9,8 +9,10 @@
         <mat-icon>account_circle</mat-icon> {{ contact.name }}
       </mat-card-title>
       <mat-card-content>
-        <p><strong>Телефон:</strong> {{ contact.phone }}</p>
-        <p *ngIf="contact.email"><strong>Електронна пошта:</strong> {{ contact.email }}</p>
+        <p><strong>Phone:</strong> {{ contact.phone }}</p>
+        <p *ngIf="contact.email"><strong>Email:</strong> {{ contact.email }}</p>
+        <p><strong>Birthday Date:</strong> {{ contact.birthDate }}</p>
+        <p><strong>Address:</strong> {{ contact.address }}</p>
       </mat-card-content>
       <mat-card-actions>
         <button mat-button color="primary" (click)="goBack()">Back</button>

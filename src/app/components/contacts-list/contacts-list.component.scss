@@ -7,6 +7,7 @@
 .contacts-header,
 .contacts-grid {
   @include header-grid-styles;
+  max-width: 960px;
 }
 
 .contacts-header {

@@ -13,6 +13,7 @@ import {
   MatDatepickerToggle
 } from "@angular/material/datepicker";
 import {provideNativeDateAdapter} from "@angular/material/core";
+import {ContactUser} from "../../models/contact-user.interface";
 
 
 @Component({
@@ -40,26 +41,39 @@ import {provideNativeDateAdapter} from "@angular/material/core";
 export class ContactFormComponent {
   contactForm: FormGroup;
   imagePreview: string | null = null;
+  isEditing: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<ContactFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: { contact: ContactUser | null, isEditing: boolean },
     private contactService: ContactService
   ) {
+    console.log('data: ', this.data);
+
     this.contactForm = this.fb.group({
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['', Validators.required],
-      address: [''],
-      birthDate: ['', Validators.required],
+      name: [data?.contact?.name || '', Validators.required],
+      email: [data?.contact?.email || '', [Validators.required, Validators.email]],
+      phone: [data?.contact?.phone || '', Validators.required],
+      address: [data?.contact?.address || ''],
+      birthDate: [data?.contact?.birthDate || '', Validators.required],
     });
+
+    this.isEditing = data?.isEditing;
   }
+
   addContact(): void {
     if (this.contactForm.valid) {
       const newContact = this.contactForm.value;
-      this.contactService.addContact(newContact);
-      this.dialogRef.close(newContact);
+
+      if (this.isEditing) {
+        const updatedContact = { ...newContact, id: this.data.contact?.id };
+        this.contactService.updateContact(updatedContact);
+        this.dialogRef.close(updatedContact);
+      } else {
+        this.contactService.addContact(newContact);
+        this.dialogRef.close(newContact);
+      }
     }
   }
 

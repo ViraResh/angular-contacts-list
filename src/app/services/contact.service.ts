@@ -66,4 +66,17 @@ export class ContactService {
     this.saveContacts(contacts);
     return contacts;
   }
+
+  updateContact(updatedContact: ContactUser): ContactUser[] {
+    const contacts: ContactUser[] = this.getContacts();
+    const index: number = contacts.findIndex((contact: ContactUser) => contact.id === updatedContact.id);
+
+    if (index !== -1) {
+      contacts[index] = updatedContact;
+      this.saveContacts(contacts);
+    }
+
+    return contacts;
+  }
+
 }

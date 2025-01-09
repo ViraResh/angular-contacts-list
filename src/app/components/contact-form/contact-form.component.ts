@@ -1,20 +1,30 @@
-import {Component, Inject} from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {MAT_DIALOG_DATA, MatDialogActions, MatDialogRef, MatDialogTitle} from "@angular/material/dialog";
-import {MatFormField, MatFormFieldModule} from "@angular/material/form-field";
-import {MatInput, MatInputModule} from "@angular/material/input";
-import {NgIf} from "@angular/common";
-import {MatButton} from "@angular/material/button";
-import {ContactService} from "../../services/contact.service";
+import { Component, Inject } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
+import { MatInput, MatInputModule } from '@angular/material/input';
+import { NgIf } from '@angular/common';
+import { MatButton } from '@angular/material/button';
 import {
   MatDatepicker,
   MatDatepickerInput,
   MatDatepickerModule,
-  MatDatepickerToggle
-} from "@angular/material/datepicker";
-import {provideNativeDateAdapter} from "@angular/material/core";
-import {ContactUser} from "../../models/contact-user.interface";
+  MatDatepickerToggle,
+} from '@angular/material/datepicker';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
+import { ContactService } from '../../services/contact.service';
+import { ContactUser } from '../../models/contact-user.interface';
 
 @Component({
   selector: 'app-contact-form',
@@ -32,11 +42,11 @@ import {ContactUser} from "../../models/contact-user.interface";
     MatDatepickerInput,
     MatDatepickerToggle,
     MatDatepicker,
-    MatDatepickerModule
+    MatDatepickerModule,
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './contact-form.component.html',
-  styleUrl: './contact-form.component.scss'
+  styleUrl: './contact-form.component.scss',
 })
 export class ContactFormComponent {
   contactForm: FormGroup;
@@ -44,16 +54,18 @@ export class ContactFormComponent {
   isEditing: boolean = false;
 
   constructor(
-    private fb: FormBuilder,
+    @Inject(MAT_DIALOG_DATA)
+    public data: { contact: ContactUser | null; isEditing: boolean },
     public dialogRef: MatDialogRef<ContactFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { contact: ContactUser | null, isEditing: boolean },
-    private contactService: ContactService
+    private fb: FormBuilder,
+    private contactService: ContactService,
   ) {
-    console.log('data: ', this.data);
-
     this.contactForm = this.fb.group({
       name: [data?.contact?.name || '', Validators.required],
-      email: [data?.contact?.email || '', [Validators.required, Validators.email]],
+      email: [
+        data?.contact?.email || '',
+        [Validators.required, Validators.email],
+      ],
       phone: [data?.contact?.phone || '', Validators.required],
       address: [data?.contact?.address || ''],
       birthDate: [data?.contact?.birthDate || '', Validators.required],
@@ -77,7 +89,7 @@ export class ContactFormComponent {
     }
   }
 
-  cancel() {
+  cancel(): void {
     this.imagePreview = null;
     this.dialogRef.close();
   }

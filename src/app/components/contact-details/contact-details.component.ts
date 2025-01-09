@@ -1,17 +1,22 @@
-import {Component, inject, Inject, OnInit} from '@angular/core';
-import {MatCard, MatCardActions, MatCardContent, MatCardTitle} from "@angular/material/card";
-import {MatIcon} from "@angular/material/icon";
-import {DatePipe, NgForOf, NgIf} from "@angular/common";
+import { Component, inject, OnInit } from '@angular/core';
 import {
-  MAT_DIALOG_DATA,
+  MatCard,
+  MatCardActions,
+  MatCardContent,
+  MatCardTitle,
+} from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { DatePipe, NgForOf, NgIf } from '@angular/common';
+import {
   MatDialogActions,
   MatDialogContent,
-  MatDialogRef,
-  MatDialogTitle
-} from "@angular/material/dialog";
-import {MatButton} from "@angular/material/button";
-import {ActivatedRoute, Router} from "@angular/router";
-import {ContactService} from "../../services/contact.service";
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import { MatButton } from '@angular/material/button';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { ContactService } from '../../services/contact.service';
+import { ContactUser } from '../../models/contact-user.interface';
 
 @Component({
   selector: 'app-contact-details',
@@ -28,21 +33,21 @@ import {ContactService} from "../../services/contact.service";
     DatePipe,
     MatCardTitle,
     MatCardContent,
-    MatCardActions
+    MatCardActions,
   ],
   templateUrl: './contact-details.component.html',
-  styleUrl: './contact-details.component.scss'
+  styleUrl: './contact-details.component.scss',
 })
 export class ContactDetailsComponent implements OnInit {
-
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
+  private route: ActivatedRoute = inject(ActivatedRoute);
+  private router: Router = inject(Router);
   private contactService = inject(ContactService);
 
-  contact: any;
+  contact!: ContactUser;
 
   ngOnInit(): void {
-    const contactId = +this.route.snapshot.paramMap.get('id')!;
+    const contactId: number = +this.route.snapshot.paramMap.get('id')!;
+
     if (contactId) {
       this.loadContactDetails(contactId);
     }
@@ -55,6 +60,7 @@ export class ContactDetailsComponent implements OnInit {
       console.error(`Contact with ID ${id} not found!`);
     }
   }
+
   goBack(): void {
     this.router.navigate(['/contacts']);
   }

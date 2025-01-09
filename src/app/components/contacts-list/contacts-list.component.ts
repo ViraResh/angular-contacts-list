@@ -1,18 +1,30 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {FormControl, ReactiveFormsModule} from '@angular/forms';
-import {MatListModule} from "@angular/material/list";
-import {MatIconModule} from "@angular/material/icon";
-import {MatButtonModule} from "@angular/material/button";
-import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatInputModule} from "@angular/material/input";
-import {NgForOf, NgIf} from "@angular/common";
-import {MatDialog, MatDialogContainer} from "@angular/material/dialog";
-import {MatCard, MatCardActions, MatCardContent, MatCardTitle} from "@angular/material/card";
-import {ContactFormComponent} from "../contact-form/contact-form.component";
-import {ContactService} from "../../services/contact.service";
-import {ContactUser} from "../../models/contact-user.interface";
-import {Router} from "@angular/router";
-import {debounceTime, distinctUntilChanged, Observable, of, switchMap} from "rxjs";
+import { Component, inject, OnInit } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { NgForOf, NgIf } from '@angular/common';
+import { MatDialog, MatDialogContainer } from '@angular/material/dialog';
+import {
+  MatCard,
+  MatCardActions,
+  MatCardContent,
+  MatCardTitle,
+} from '@angular/material/card';
+import { Router } from '@angular/router';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  Observable,
+  of,
+  switchMap,
+} from 'rxjs';
+
+import { ContactFormComponent } from '../contact-form/contact-form.component';
+import { ContactService } from '../../services/contact.service';
+import { ContactUser } from '../../models/contact-user.interface';
 
 @Component({
   selector: 'app-contacts-list',
@@ -33,20 +45,20 @@ import {debounceTime, distinctUntilChanged, Observable, of, switchMap} from "rxj
     MatCard,
     MatCardTitle,
     MatCardActions,
-  ]
+  ],
 })
 export class ContactsListComponent implements OnInit {
   searchControl: FormControl<string | null> = new FormControl('');
   filteredContacts: ContactUser[] = [];
   contacts: ContactUser[] = [];
   private router: Router = inject(Router);
-  private readonly modalWidth = '400px';
-  private readonly enterAnimationDuration = '500ms';
-  private readonly exitAnimationDuration = '300ms';
+  private readonly modalWidth: string = '400px';
+  private readonly enterAnimationDuration: string = '500ms';
+  private readonly exitAnimationDuration: string = '300ms';
 
   constructor(
     private dialog: MatDialog,
-    private contactService: ContactService
+    private contactService: ContactService,
   ) {}
 
   ngOnInit(): void {
@@ -75,8 +87,6 @@ export class ContactsListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(() => {
       this.contacts = this.contactService.getContacts();
     });
-
-    console.log('openEditContactForm: ', !!contact);
   }
 
   openAddContactForm(): void {
@@ -107,7 +117,9 @@ export class ContactsListComponent implements OnInit {
       .pipe(
         debounceTime(300),
         distinctUntilChanged(),
-        switchMap((searchTerm: string | null) => this.searchContacts(searchTerm!))
+        switchMap((searchTerm: string | null) =>
+          this.searchContacts(searchTerm!),
+        ),
       )
       .subscribe((result: ContactUser[]) => {
         this.filteredContacts = result;
@@ -123,7 +135,8 @@ export class ContactsListComponent implements OnInit {
 
     const lowerCaseTerm: string = searchTerm.toLowerCase();
     const filtered: ContactUser[] = this.contacts.filter(
-      (contact: ContactUser) => contact.name.toLowerCase().includes(lowerCaseTerm)
+      (contact: ContactUser) =>
+        contact.name.toLowerCase().includes(lowerCaseTerm),
     );
     return of(filtered);
   }

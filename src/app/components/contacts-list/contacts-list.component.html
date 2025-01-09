@@ -1,0 +1,30 @@
+<div class="contacts-container">
+
+  <div class="contacts-header">
+    <h1>Contact List</h1>
+    <button mat-raised-button color="primary" (click)="openAddContactForm()">
+      <mat-icon>person_add</mat-icon>
+      Add new contact
+    </button>
+  </div>
+  <div *ngIf="contacts.length === 0; else contactList">
+    <p class="empty-message">Your contact list is empty. Add a new contact to get started.</p>
+  </div>
+  <ng-template #contactList>
+    <div class="contacts-grid">
+      <mat-card class="contact-card" *ngFor="let contact of contacts" (click)="openContactDetail(contact)">
+        <mat-card-title>
+          <mat-icon>account_circle</mat-icon>
+          {{ contact.name }}
+        </mat-card-title>
+        <mat-card-content>
+          <div class="phone-icon"><mat-icon class="custom-icon">phone</mat-icon> {{ contact.phone }}</div>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button color="accent">Edit</button>
+          <button mat-button color="warn" (click)="deleteContact(contact.id)">Delete</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </ng-template>
+</div>

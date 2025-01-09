@@ -1,0 +1,25 @@
+<div class="contact-container">
+  <div class="contact-header">
+    <h2 mat-dialog-title>Detail information</h2>
+  </div>
+
+  <div class="contact-grid">
+    <mat-card *ngIf="contact" class="contact-card">
+      <mat-card-title>
+        <mat-icon>account_circle</mat-icon> {{ contact.name }}
+      </mat-card-title>
+      <mat-card-content>
+        <p><strong>Телефон:</strong> {{ contact.phone }}</p>
+        <p *ngIf="contact.email"><strong>Електронна пошта:</strong> {{ contact.email }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button color="primary" (click)="goBack()">Back</button>
+      </mat-card-actions>
+    </mat-card>
+
+    <ng-container *ngIf="!contact">
+      <p>Contact not found.</p>
+      <button mat-button color="primary" (click)="goBack()">Back</button>
+    </ng-container>
+  </div>
+</div>

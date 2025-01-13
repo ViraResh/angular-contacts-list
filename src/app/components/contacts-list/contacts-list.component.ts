@@ -99,8 +99,11 @@ export class ContactsListComponent implements OnInit {
       exitAnimationDuration: this.exitAnimationDuration,
     });
 
-    dialogRef.afterClosed().subscribe(() => {
-      this.contacts = this.contactService.getContacts();
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.contacts = this.contactService.getContacts();
+        this.triggerSearch();
+      }
     });
   }
 

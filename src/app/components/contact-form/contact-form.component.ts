@@ -66,7 +66,13 @@ export class ContactFormComponent {
         data?.contact?.email || '',
         [Validators.required, Validators.email],
       ],
-      phone: [data?.contact?.phone || '', Validators.required],
+      phone: [
+        data?.contact?.phone || '',
+        [
+          Validators.required,
+          Validators.pattern(/^\+?[0-9]{10,15}$/),
+        ],
+      ],
       address: [data?.contact?.address || ''],
       birthDate: [data?.contact?.birthDate || '', Validators.required],
     });

@@ -1,5 +1,5 @@
 <h2 mat-dialog-title class="dialog-title">Add New Contact</h2>
-<form [formGroup]="contactForm" (ngSubmit)="addContact()" class="contact-form">
+<form [formGroup]="contactForm" (ngSubmit)="submitContactForm()" class="contact-form">
   <mat-form-field class="form-field">
     <input matInput formControlName="name" placeholder="Name" required />
     <mat-error
@@ -23,13 +23,17 @@
   </mat-form-field>
 
   <mat-form-field class="form-field">
-    <input matInput formControlName="phone" placeholder="Phone" required />
-    <mat-error
-      *ngIf="
-        contactForm.get('phone')?.invalid && contactForm.get('phone')?.touched
-      "
-    >
+    <input
+      matInput
+      formControlName="phone"
+      placeholder="Phone"
+      required
+    />
+    <mat-error *ngIf="contactForm.get('phone')?.hasError('required')">
       Phone number is required
+    </mat-error>
+    <mat-error *ngIf="contactForm.get('phone')?.hasError('pattern')">
+      Enter a valid phone number (10-15 digits, possible with +).
     </mat-error>
   </mat-form-field>
 

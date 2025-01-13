@@ -14,7 +14,7 @@ export class ContactService {
       birthDate: new Date('2000-01-01'),
       address: 'Nulla vel metus 15/178',
       email: 'example@email.com',
-      phone: '(123) 888 777 632',
+      phone: '+1123888777632',
     },
     {
       id: 2,
@@ -23,7 +23,7 @@ export class ContactService {
       birthDate: new Date('2001-02-01'),
       address: 'Lorem ipsum 10/3',
       email: 'john@example.com',
-      phone: '(321) 555 123 456',
+      phone: '+1123467777632',
     },
   ];
 
@@ -52,7 +52,7 @@ export class ContactService {
     localStorage.setItem(this.storageKey, JSON.stringify(contacts));
   }
 
-  addContact(contact: ContactUser): ContactUser[] {
+  createContact(contact: ContactUser): ContactUser[] {
     const contacts: ContactUser[] = this.getContacts();
     contact.id = this.generateId();
     contacts.push(contact);

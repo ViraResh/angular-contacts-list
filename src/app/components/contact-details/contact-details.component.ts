@@ -62,6 +62,6 @@ export class ContactDetailsComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/contacts']);
+    this.router.navigate(['/']);
   }
 }

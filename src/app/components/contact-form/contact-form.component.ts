@@ -80,7 +80,7 @@ export class ContactFormComponent {
     this.isEditing = data?.isEditing;
   }
 
-  addContact(): void {
+  submitContactForm(): void {
     if (this.contactForm.valid) {
       const newContact = this.contactForm.value;
 
@@ -89,7 +89,7 @@ export class ContactFormComponent {
         this.contactService.updateContact(updatedContact);
         this.dialogRef.close(updatedContact);
       } else {
-        this.contactService.addContact(newContact);
+        this.contactService.createContact(newContact);
         this.dialogRef.close(newContact);
       }
     }

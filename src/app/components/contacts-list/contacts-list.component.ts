@@ -25,6 +25,7 @@ import {
 import { ContactFormComponent } from '../contact-form/contact-form.component';
 import { ContactService } from '../../services/contact.service';
 import { ContactUser } from '../../models/contact-user.interface';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-contacts-list',
@@ -86,8 +87,7 @@ export class ContactsListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.contacts = this.contactService.getContacts();
-        this.triggerSearch();
+        this.updatePageState();
       }
     });
   }
@@ -101,14 +101,25 @@ export class ContactsListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.contacts = this.contactService.getContacts();
-        this.triggerSearch();
+        this.updatePageState();
       }
     });
   }
 
-  deleteContact(contactId: number): void {
-    this.contacts = this.contactService.deleteContact(contactId);
+  deleteContact(event: Event, contactId: number): void {
+    event.stopPropagation();
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '300px',
+      data: { contactId },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.contacts = this.contactService.deleteContact(contactId);
+        this.updatePageState();
+      }
+    });
   }
 
   onSearchClick(): void {
@@ -116,6 +127,11 @@ export class ContactsListComponent implements OnInit {
     this.searchContacts(searchTerm!).subscribe((result: ContactUser[]) => {
       this.filteredContacts = result;
     });
+  }
+
+  private updatePageState(): void {
+    this.contacts = this.contactService.getContacts();
+    this.triggerSearch();
   }
 
   private triggerSearch(): void {
